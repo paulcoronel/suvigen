@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:ffmpeg_kit_flutter_video/ffmpeg_kit_config.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -17,6 +18,20 @@ class VideoUtil {
     Future<File> fileFuture = File(fullTemporaryPath)
         .writeAsBytes(bytes, mode: FileMode.writeOnly, flush: true);
 
+    return fileFuture;
+  }
+
+  static Future<File> copyAssetToFile(String assetName) async {
+    final ByteData assetByteData = await rootBundle.load('assets/$assetName');
+
+    final List<int> byteList = assetByteData.buffer
+        .asUint8List(assetByteData.offsetInBytes, assetByteData.lengthInBytes);
+
+    final String fullTemporaryPath =
+        join((await tempDirectory).path, assetName);
+
+    Future<File> fileFuture = File(fullTemporaryPath)
+        .writeAsBytes(byteList, mode: FileMode.writeOnly, flush: true);
     return fileFuture;
   }
 
@@ -38,6 +53,10 @@ class VideoUtil {
     return await getApplicationDocumentsDirectory();
   }
 
+  static Future<Directory?> get downloadsDirectory async {
+    return await getDownloadsDirectory();
+  }
+
   static Future<Directory> get tempDirectory async {
     return await getTemporaryDirectory();
   }
@@ -56,8 +75,8 @@ class VideoUtil {
 
       srt += "$index\n";
       srt += "${formatTime(startTime)} --> ${formatTime(endTime)}\n";
-      //srt += "{\\an5}$sentence\n\n"; //Middle-center
-      srt += "$sentence\n\n";
+      srt += "{\\an5}$sentence\n\n"; //Middle-center
+      //srt += "$sentence\n\n";
       index++;
       startTime = endTime;
     }

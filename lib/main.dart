@@ -1,7 +1,7 @@
 import 'package:ffmpeg_kit_flutter_video/ffmpeg_kit_config.dart';
 import 'package:flutter/material.dart';
-import 'package:suvigen/suvigen_screen.dart';
 import 'package:suvigen/video_util.dart';
+import 'app_router.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,13 +17,13 @@ class SuvigenApp extends StatelessWidget {
       VideoUtil.registerApplicationFonts();
       //initialize your resources
     });
-
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Suvigen',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const SuvigenScreen(),
+      routeInformationProvider: AppRouter.router.routeInformationProvider,
+      routeInformationParser: AppRouter.router.routeInformationParser,
+      routerDelegate: AppRouter.router.routerDelegate,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(useMaterial3: true),
     );
   }
 }

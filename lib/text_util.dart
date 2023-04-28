@@ -11,4 +11,9 @@ class TextUtil {
     }
     return sentences;
   }
+
+  static int countWords(String phrase) {
+    return phrase.trim().split(' ').length;
+  }
+
 }

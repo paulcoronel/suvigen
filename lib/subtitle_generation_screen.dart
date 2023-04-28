@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:ffmpeg_kit_flutter_video/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter_video/ffmpeg_kit_config.dart';
 import 'package:ffmpeg_kit_flutter_video/log.dart';
@@ -8,31 +7,27 @@ import 'package:ffmpeg_kit_flutter_video/session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:suvigen/constant.dart';
-import 'package:suvigen/text_util.dart';
 import 'package:suvigen/util.dart';
 import 'package:suvigen/video_util.dart';
 import 'package:video_player/video_player.dart';
 
-class SuvigenScreen extends StatefulWidget {
-  const SuvigenScreen({Key? key}) : super(key: key);
+class SubtitleGenerationScreen extends StatefulWidget {
+  const SubtitleGenerationScreen({Key? key}) : super(key: key);
 
   @override
-  SuvigenScreenState createState() => SuvigenScreenState();
+  SubtitleGenerationState createState() => SubtitleGenerationState();
 }
 
 enum VideoCreationState { notStarted, creatingVideo, addingSubtitles, complete }
 
-class SuvigenScreenState extends State<SuvigenScreen> {
-  final TextEditingController _text = TextEditingController();
+class SubtitleGenerationState extends State<SubtitleGenerationScreen> {
   VideoCreationState _videoCreationState = VideoCreationState.notStarted;
   VideoPlayerController? _videoPlayerController;
   File? outputFile;
-  static const double averageReadingSpeed = 150;
 
   @override
   void initState() {
     serVideoPlayerController();
-    _text.text = Constant.strStart;
     FFmpegKitConfig.enableLogCallback(logCallback);
     super.initState();
   }
@@ -50,7 +45,6 @@ class SuvigenScreenState extends State<SuvigenScreen> {
 
   @override
   void dispose() {
-    _text.dispose();
     super.dispose();
   }
 
@@ -60,29 +54,13 @@ class SuvigenScreenState extends State<SuvigenScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Suvigen'),
+        title: const Text('Generate subtitles on a Video')
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Enter the text',
-              style: TextStyle(fontSize: 18.0),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              minLines: 5,
-              controller: _text,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Text',
-              ),
-            ),
-            const SizedBox(height: 16.0),
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _videoCreationState ==
@@ -98,8 +76,9 @@ class SuvigenScreenState extends State<SuvigenScreen> {
               child: _videoCreationState == VideoCreationState.creatingVideo ||
                       _videoCreationState == VideoCreationState.addingSubtitles
                   ? const CircularProgressIndicator()
-                  : const Text('Generate Video'),
+                  : const Text('Generate video with subtitles'),
             ),
+            const SizedBox(height: 16.0),
             SizedBox(
               height: 480,
               width: 640,
@@ -133,9 +112,9 @@ class SuvigenScreenState extends State<SuvigenScreen> {
   }
 
   void _generateVideo() async {
-    List<String> sentences = TextUtil.splitIntoSentences(_text.value.text);
+    List<String> sentences = Constant.originalText;
     String subtitles =
-        VideoUtil.generateSubtitles(sentences, averageReadingSpeed);
+        VideoUtil.generateSubtitles(sentences, Constant.averageReadingSpeed);
 
     await VideoUtil.writeStringToFile(subtitles, VideoUtil.subtitleFile)
         .then((value) {

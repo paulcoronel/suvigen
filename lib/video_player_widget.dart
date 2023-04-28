@@ -17,27 +17,30 @@ class VideoPlayerWidget extends StatelessWidget {
     return Material(
         elevation: 0,
         child: Center(
-          child: FutureBuilder<bool>(
-            future: Future.value(_videoPlayerController!.value.isInitialized),
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              if (snapshot.data == true) {
-                return Container(
-                  height: 1000,
-                  width: 1000,
-                  alignment: const Alignment(0.0, 0.0),
-                  child: VideoPlayer(_videoPlayerController!),
-                );
-              } else {
-                return Container(
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: FutureBuilder<bool>(
+              future: Future.value(_videoPlayerController!.value.isInitialized),
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                if (snapshot.data == true) {
+                  return Container(
+                    height: 360,
+                    width: 640,
                     alignment: const Alignment(0.0, 0.0),
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(0, 0, 241, 1.0),
-                        border: Border.all(
-                          color: const Color.fromRGBO(185, 195, 199, 1.0),
-                          width: 1.0,
-                        )));
-              }
-            },
+                    child: VideoPlayer(_videoPlayerController!),
+                  );
+                } else {
+                  return Container(
+                      alignment: const Alignment(0.0, 0.0),
+                      decoration: BoxDecoration(
+                          color: const Color.fromRGBO(0, 0, 241, 1.0),
+                          border: Border.all(
+                            color: const Color.fromRGBO(185, 195, 199, 1.0),
+                            width: 1.0,
+                          )));
+                }
+              },
+            ),
           ),
         ));
   }

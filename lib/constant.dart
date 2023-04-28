@@ -16,7 +16,7 @@ class Constant {
   ];
 
   static const subtitleText = [
-    "Flutter es la caja de herramientas de UI portátil de Google para crear aplicaciones hermosas compiladas nativamente para móvil, web y escritorio desde una sola base de código.",
+    "Flutter es el kit de herramientas de interfaz de usuario portátil de Google para crear aplicaciones hermosas compiladas nativamente para móvil, web y escritorio desde una sola base de código.",
     "Flutter funciona con código existente, es utilizado por desarrolladores y organizaciones en todo el mundo, y es gratuito y de código abierto.",
     "Flutter está diseñado para admitir aplicaciones móviles que se ejecutan tanto en Android como en iOS, así como aplicaciones interactivas que desea ejecutar en sus páginas web o en el escritorio.",
     "Las aplicaciones que necesitan ofrecer diseños altamente de marca son especialmente adecuadas para Flutter.",
